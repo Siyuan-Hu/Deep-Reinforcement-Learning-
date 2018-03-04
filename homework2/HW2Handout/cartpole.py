@@ -13,13 +13,14 @@ class QNetwork():
 	# The network should take in state of the world as an input, 
 	# and output Q values of the actions available to the agent as the output. 
 
-	def __init__(self, environment_name, model = None):
+	def __init__(self, environment_name, dueling = True, model = None):
 		# Define your network architecture here. It is also a good idea to define any training operations 
 		# and optimizers here, initialize your variables, or alternately compile your model here.
 		env = gym.make(environment_name)
 		self.state_dim = env.observation_space.shape[0]
 		self.action_dim = env.action_space.n
 		self.learning_rate = 0.0001
+		self.dueling = dueling
 
 		self.session = tf.InteractiveSession()
 
@@ -29,28 +30,43 @@ class QNetwork():
 			self.CreateMLP()
 			self.CreateOptimizer()
 
+	def CreateDuelingLayer(self, last_layer, unit_num):
+		w_v = tf.Variable(tf.random_normal([unit_num, 1]))
+		b_v = tf.Variable(tf.random_normal([1]))
+		v_layer = tf.add(tf.matmul(last_layer, w_v), b_v)
+
+		w_a = tf.Variable(tf.random_normal([unit_num, self.action_dim]))
+		b_a = tf.Variable(tf.random_normal([self.action_dim]))
+		a_layer = tf.add(tf.matmul(last_layer, w_a), b_a)
+
+		self.q_values = tf.add(v_layer, a_layer - tf.reduce_mean(a_layer, axis = 1, keepdims = True))
 
 	def CreateMLP(self):
 		self.hidden_units = 20
 
 		self.w1 = tf.Variable(tf.random_normal([self.state_dim, self.hidden_units]))
 		self.b1 = tf.Variable(tf.random_normal([self.hidden_units]))
-		self.w2 = tf.Variable(tf.random_normal([self.hidden_units, self.action_dim]))
-		self.b2 = tf.Variable(tf.random_normal([self.action_dim]))
 
 		self.state_input = tf.placeholder(tf.float32, [None, self.state_dim], name = "state_input")
 
 		h_layer = tf.nn.relu(tf.matmul(self.state_input,self.w1) + self.b1)
 
-		self.q_values = tf.add(tf.matmul(h_layer, self.w2), self.b2, name = "q_values")
+		if self.dueling:
+			CreateDuelingLayer(h_layer, self.hidden_units)
+		else:
+			self.w2 = tf.Variable(tf.random_normal([self.hidden_units, self.action_dim]))
+			self.b2 = tf.Variable(tf.random_normal([self.action_dim]))
+			self.q_values = tf.add(tf.matmul(h_layer, self.w2), self.b2, name = "q_values")
 
 	def CreateLinearNetwork(self):
-		w = tf.Variable(tf.zeros([self.state_dim, self.action_dim]))
-		b = tf.Variable(tf.zeros([self.action_dim]))
-
 		self.state_input = tf.placeholder(tf.float32, [None, self.state_dim], name = "state_input")
 
-		self.q_values = tf.add(tf.matmul(self.state_input, w), b, name = "q_values")
+		if self.dueling:
+			CreateDuelingLayer(self.state_input, self.state_dim)
+		else:
+			w = tf.Variable(tf.zeros([self.state_dim, self.action_dim]))
+			b = tf.Variable(tf.zeros([self.action_dim]))
+			self.q_values = tf.add(tf.matmul(self.state_input, w), b, name = "q_values")
 
 	def CreateOptimizer(self):
 		self.action_input = tf.placeholder(tf.float32, [None, self.action_dim], name = "action_input")
@@ -106,7 +122,7 @@ class Replay_Memory():
 		self.burn_in = burn_in
 		pass
 
-	def sample_batch(self, batch_size=32):
+	def sample_batch(self, batch_size=1):
 		# This function returns a batch of randomly sampled transitions - i.e. state, action, reward, next state, terminal flag tuples. 
 		# You will feed this to your model to train.
 		return random.sample(self.buffer, batch_size)
