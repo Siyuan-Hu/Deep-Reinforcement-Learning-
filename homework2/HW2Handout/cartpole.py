@@ -52,7 +52,7 @@ class QNetwork():
 		h_layer = tf.nn.relu(tf.matmul(self.state_input,self.w1) + self.b1)
 
 		if self.dueling:
-			CreateDuelingLayer(h_layer, self.hidden_units)
+			self.CreateDuelingLayer(h_layer, self.hidden_units)
 		else:
 			self.w2 = tf.Variable(tf.random_normal([self.hidden_units, self.action_dim]))
 			self.b2 = tf.Variable(tf.random_normal([self.action_dim]))
@@ -62,7 +62,7 @@ class QNetwork():
 		self.state_input = tf.placeholder(tf.float32, [None, self.state_dim], name = "state_input")
 
 		if self.dueling:
-			CreateDuelingLayer(self.state_input, self.state_dim)
+			self.CreateDuelingLayer(self.state_input, self.state_dim)
 		else:
 			w = tf.Variable(tf.zeros([self.state_dim, self.action_dim]))
 			b = tf.Variable(tf.zeros([self.action_dim]))
