@@ -29,11 +29,11 @@ class QNetwork():
 		self.dueling = dueling
 
 		self.session = tf.InteractiveSession()
-		self.keep_prob = tf.placeholder("float", name = "keep_prob")
 
 		if model != None:
 			self.load_model(model)
 		else:
+			self.keep_prob = tf.placeholder(tf.float32, name = "keep_prob")
 			self.CreateCNN()
 			self.CreateOptimizer()
 
@@ -218,6 +218,7 @@ class DQN_Agent():
 		# Create an instance of the network itself, as well as the memory. 
 		# Here is also a good place to set environmental parameters,
 		# as well as training parameters - number of episodes / iterations, etc.
+		# self.q_network = QNetwork(environment_name, dueling = False, model = "./checkpoints/SpaceInvaders-v0-0")
 		self.q_network = QNetwork(environment_name)
 		self.replay_memory = Replay_Memory()
 		self.env = gym.make(environment_name)
@@ -316,7 +317,7 @@ class DQN_Agent():
 			if i_episode % 200 == 0:
 				print("episode: ", i_episode)
 				self.test()
-				# self.q_network.save_model_weights("./checkpoints/CartPole-v0", i_episode)
+				self.q_network.save_model_weights("./checkpoints/SpaceInvaders-v0", i_episode)
 
 
 	def test(self, model_file=None):
