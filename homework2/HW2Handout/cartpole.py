@@ -17,7 +17,10 @@ class QNetwork():
 		# Define your network architecture here. It is also a good idea to define any training operations 
 		# and optimizers here, initialize your variables, or alternately compile your model here.
 		env = gym.make(environment_name)
-		self.state_dim = env.observation_space.shape[0]
+		self.state_dim = list(env.observation_space.shape)
+		self.flat_state_dim = 1
+		for i in self.state_dim:
+			self.flat_state_dim *= i
 		self.action_dim = env.action_space.n
 		self.learning_rate = 0.0001
 		self.dueling = dueling
@@ -44,12 +47,14 @@ class QNetwork():
 	def CreateMLP(self):
 		self.hidden_units = 20
 
-		self.w1 = tf.Variable(tf.random_normal([self.state_dim, self.hidden_units]))
+		self.w1 = tf.Variable(tf.random_normal([self.flat_state_dim, self.hidden_units]))
 		self.b1 = tf.Variable(tf.random_normal([self.hidden_units]))
 
-		self.state_input = tf.placeholder(tf.float32, [None, self.state_dim], name = "state_input")
+		self.state_input = tf.placeholder(tf.float32, [None] + self.state_dim, name = "state_input")
 
-		h_layer = tf.nn.relu(tf.matmul(self.state_input,self.w1) + self.b1)
+		flat_state = tf.reshape(self.state_input, [-1, self.flat_state_dim])
+
+		h_layer = tf.nn.relu(tf.matmul(flat_state, self.w1) + self.b1)
 
 		if self.dueling:
 			self.CreateDuelingLayer(h_layer, self.hidden_units)
@@ -59,14 +64,16 @@ class QNetwork():
 			self.q_values = tf.add(tf.matmul(h_layer, self.w2), self.b2, name = "q_values")
 
 	def CreateLinearNetwork(self):
-		self.state_input = tf.placeholder(tf.float32, [None, self.state_dim], name = "state_input")
+		self.state_input = tf.placeholder(tf.float32, [None] + self.state_dim, name = "state_input")
+
+		flat_state = tf.reshape(self.state_input, [-1, self.flat_state_dim])
 
 		if self.dueling:
-			self.CreateDuelingLayer(self.state_input, self.state_dim)
+			self.CreateDuelingLayer(flat_state, self.flat_state_dim)
 		else:
-			w = tf.Variable(tf.zeros([self.state_dim, self.action_dim]))
+			w = tf.Variable(tf.zeros([self.flat_state_dim, self.action_dim]))
 			b = tf.Variable(tf.zeros([self.action_dim]))
-			self.q_values = tf.add(tf.matmul(self.state_input, w), b, name = "q_values")
+			self.q_values = tf.add(tf.matmul(self.flat_state, w), b, name = "q_values")
 
 	def CreateOptimizer(self):
 		self.action_input = tf.placeholder(tf.float32, [None, self.action_dim], name = "action_input")
