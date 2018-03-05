@@ -246,6 +246,7 @@ class DQN_Agent():
 
 		# If you are using a replay memory, you should interact with environment here, and store these 
 		# transitions to memory, while also updating your model.
+		update_count = 0
 		for i_episode in range(self.episode):
 			state = self.env.reset()
 			reward_sum = 0
@@ -291,6 +292,8 @@ class DQN_Agent():
 					self.replay_memory.append([state, action_input, target])
 
 				if len(self.replay_memory.buffer) >= self.replay_memory.burn_in:
+					update_count += 1
+					print "update ", update_count
 					# train
 					batch = self.replay_memory.sample_batch()
 					state_batch = []
@@ -314,7 +317,8 @@ class DQN_Agent():
 			# if reward_sum > -200:
 			# 	print("episode", i_episode, " reward: ", reward_sum)
 
-			if i_episode % 200 == 0:
+			if update_count > 1000:
+				update_count = 0
 				print("episode: ", i_episode)
 				self.test()
 				self.q_network.save_model_weights("./checkpoints/SpaceInvaders-v0", i_episode)
