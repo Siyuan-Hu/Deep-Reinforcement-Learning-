@@ -6,7 +6,9 @@ INIT_EPSILON = 0.5
 FINAL_EPSILON = 0.05
 DECAY_ITERATION = 100000
 MAX_ITERATION_PER_EPISODE = 10000
+CONSECUTIVE_FRAMES = 4
 ENVIRONMENT_NAME = 'SpaceInvaders-v0'
+MODEL = 'CNN'
 
 class QNetwork():
 
@@ -60,15 +62,24 @@ class QNetwork():
 
 		self.q_values = tf.add(v_layer, a_layer - tf.reduce_mean(a_layer, axis = 1, keepdims = True))
 
-	def ConvertImage(self, origin_state):
-		gray_scale = tf.image.rgb_to_grayscale(origin_state)
+	def ConvertImage(self, images):
+		gray_scale = tf.image.rgb_to_grayscale(images)
 		return tf.image.resize_images(gray_scale, [84, 84])
 
-	def CreateCNN(self):
-		self.state_input = tf.placeholder(tf.float32, [None] + self.state_dim, name = "state_input")
-		converted_state = self.ConvertImage(self.state_input) # to 84*84*1
+	def PreprocessState(self, origin_state):
+		frames = []
+		for i in range(CONSECUTIVE_FRAMES):
+			frames.append(self.ConvertImage(origin_state[:,i,:,:,:]))
+		# Hard code here to concatenate all four frame
+		return tf.concat([frames[0], frames[1], frames[2], frames[3]], axis = 3)
 
-		w_conv1 = self.CreateWeights([5, 5, 1, 32])
+	def CreateCNN(self):
+		# There are four consecutive frames per state
+		self.state_input = tf.placeholder(tf.float32, [None, CONSECUTIVE_FRAMES] + self.state_dim, 
+			name = "state_input")
+		converted_state = self.PreprocessState(self.state_input) # to 84*84*4
+
+		w_conv1 = self.CreateWeights([5, 5, CONSECUTIVE_FRAMES, 32])
 		b_conv1 = self.CreateBias([32])
 
 		h_conv1 = tf.nn.relu(self.CreateConv2d(converted_state, w_conv1) + b_conv1)
@@ -236,8 +247,16 @@ class DQN_Agent():
 		# transitions to memory, while also updating your model.
 		for i_episode in range(self.episode):
 			state = self.env.reset()
-			q_values = self.q_network.get_q_values([state])[0] # this q values could be multiple states
 			reward_sum = 0
+
+			if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
+				frame_batch = deque()
+				for f in range(CONSECUTIVE_FRAMES):
+					frame_batch.append(state)
+				q_values = self.q_network.get_q_values([frame_batch])[0]
+			else:
+				q_values = self.q_network.get_q_values([state])[0]
+
 			for t in range(MAX_ITERATION_PER_EPISODE):
 				# self.env.render()
 				action = self.epsilon_greedy_policy(q_values, self.epsilon)
@@ -251,12 +270,24 @@ class DQN_Agent():
 				action_input = npy.zeros(self.action_dim)
 				action_input[action] = 1
 
-				next_state_q_values = self.q_network.get_q_values([next_state])[0]
+				if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
+					next_frame_batch = frame_batch
+					next_frame_batch.append(next_state)
+					next_frame_batch.popleft()
+					next_state_q_values = self.q_network.get_q_values([next_frame_batch])[0]
+				else:
+					next_state_q_values = self.q_network.get_q_values([next_state])[0]
+
 				target = reward
 				if not done:
 					target += self.gamma * next_state_q_values[self.greedy_policy(next_state_q_values)]
 
-				self.replay_memory.append([state, action_input, target])
+
+				if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
+					self.replay_memory.append([frame_batch, action_input, target])
+					frame_batch = next_frame_batch
+				else:
+					self.replay_memory.append([state, action_input, target])
 
 				if len(self.replay_memory.buffer) >= self.replay_memory.burn_in:
 					# train
@@ -295,12 +326,26 @@ class DQN_Agent():
 		total_reward = 0
 		for i in range(episode_num):
 			state = self.env.reset()
+
+			if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
+				frame_batch = deque()
+				for f in range(CONSECUTIVE_FRAMES):
+					frame_batch.append(state)
+
 			for t in range(MAX_ITERATION_PER_EPISODE):
-				q_values = self.q_network.get_q_values([state])[0] # this q values could be multiple states
+				if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
+					q_values = self.q_network.get_q_values([frame_batch])[0]
+				else:
+					q_values = self.q_network.get_q_values([state])[0]
+
 				self.env.render()
 				action = self.epsilon_greedy_policy(q_values, FINAL_EPSILON)
 
 				state, reward, done, info = self.env.step(action)
+
+				if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
+					frame_batch.append(state)
+					frame_batch.popleft()
 
 				total_reward += reward
 
