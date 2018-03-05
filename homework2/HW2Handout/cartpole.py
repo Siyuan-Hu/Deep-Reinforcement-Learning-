@@ -6,6 +6,7 @@ INIT_EPSILON = 0.5
 FINAL_EPSILON = 0.05
 DECAY_ITERATION = 100000
 MAX_ITERATION_PER_EPISODE = 10000
+ENVIRONMENT_NAME = 'SpaceInvaders-v0'
 
 class QNetwork():
 
@@ -26,12 +27,27 @@ class QNetwork():
 		self.dueling = dueling
 
 		self.session = tf.InteractiveSession()
+		self.keep_prob = tf.placeholder("float", name = "keep_prob")
 
 		if model != None:
 			self.load_model(model)
 		else:
-			self.CreateMLP()
+			self.CreateCNN()
 			self.CreateOptimizer()
+
+	def CreateWeights(self, shape):
+		initial = tf.truncated_normal(shape, stddev = 0.1)
+		return tf.Variable(initial)
+
+	def CreateBias(self, shape):
+		initial = tf.constant(0.1, shape = shape)
+		return tf.Variable(initial)
+
+	def CreateConv2d(self, x, w):
+		return tf.nn.conv2d(x, w, strides=[1, 1, 1, 1], padding='SAME')
+
+	def CreateMaxPool(self, x):
+		return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 	def CreateDuelingLayer(self, last_layer, unit_num):
 		w_v = tf.Variable(tf.random_normal([unit_num, 1]))
@@ -43,6 +59,40 @@ class QNetwork():
 		a_layer = tf.add(tf.matmul(last_layer, w_a), b_a)
 
 		self.q_values = tf.add(v_layer, a_layer - tf.reduce_mean(a_layer, axis = 1, keepdims = True))
+
+	def ConvertImage(self, origin_state):
+		gray_scale = tf.image.rgb_to_grayscale(origin_state)
+		return tf.image.resize_images(gray_scale, [84, 84])
+
+	def CreateCNN(self):
+		self.state_input = tf.placeholder(tf.float32, [None] + self.state_dim, name = "state_input")
+		converted_state = self.ConvertImage(self.state_input) # to 84*84*1
+
+		w_conv1 = self.CreateWeights([5, 5, 1, 32])
+		b_conv1 = self.CreateBias([32])
+
+		h_conv1 = tf.nn.relu(self.CreateConv2d(converted_state, w_conv1) + b_conv1)
+		h_pool1 = self.CreateMaxPool(h_conv1) # to 42*42*32
+
+		W_conv2 = self.CreateWeights([5, 5, 32, 64])
+		b_conv2 = self.CreateBias([64])
+
+		h_conv2 = tf.nn.relu(self.CreateConv2d(h_pool1, W_conv2) + b_conv2)
+		h_pool2 = self.CreateMaxPool(h_conv2) # to 21*21*64
+
+		W_fc1 = self.CreateWeights([21 * 21 * 64, 1024])
+		b_fc1 = self.CreateBias([1024])
+
+		h_pool2_flat = tf.reshape(h_pool2, [-1, 21 * 21 * 64])
+		h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+
+		# self.keep_prob = tf.placeholder("float", name = "keep_prob")
+		h_fc1_drop = tf.nn.dropout(h_fc1, self.keep_prob)
+
+		W_fc2 = self.CreateWeights([1024, self.action_dim])
+		b_fc2 = self.CreateBias([self.action_dim])
+
+		self.q_values = tf.add(tf.matmul(h_fc1_drop, W_fc2), b_fc2, name = "q_values")
 
 	def CreateMLP(self):
 		self.hidden_units = 20
@@ -85,7 +135,7 @@ class QNetwork():
 		self.session.run(tf.global_variables_initializer())
 
 	def get_q_values(self, state):
-		return self.q_values.eval(feed_dict = {self.state_input : state})
+		return self.q_values.eval(feed_dict = {self.state_input : state, self.keep_prob : 1.0})
 
 	def save_model_weights(self, suffix, step):
 		# Helper function to save your model / weights.
@@ -104,6 +154,7 @@ class QNetwork():
 		self.state_input = graph.get_tensor_by_name("state_input:0")
 		self.action_input = graph.get_tensor_by_name("action_input:0")
 		self.target_q_value = graph.get_tensor_by_name("target_q_value:0")
+		self.keep_prob = graph.get_tensor_by_name("keep_prob:0")
 		self.optimizer = tf.get_collection("optimizer")[0]
 		pass
 
@@ -219,7 +270,8 @@ class DQN_Agent():
 						target_batch.append(data[2])
 
 						self.q_network.optimizer.run(feed_dict = {self.q_network.state_input : state_batch, 
-							self.q_network.action_input : action_batch, self.q_network.target_q_value : target_batch})
+							self.q_network.action_input : action_batch, 
+							self.q_network.target_q_value : target_batch, self.q_network.keep_prob : 0.5})
 				
 				state = next_state
 				q_values = next_state_q_values
@@ -285,7 +337,7 @@ def main(args):
 
 	# You want to create an instance of the DQN_Agent class here, and then train / test it. 
 
-	environment_name = 'CartPole-v0'
+	environment_name = ENVIRONMENT_NAME
 	agent = DQN_Agent(environment_name)
 	agent.train()
 
