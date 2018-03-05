@@ -178,7 +178,7 @@ class QNetwork():
 class Replay_Memory():
 
 	# burn_in = 10000
-	def __init__(self, memory_size=50000, burn_in=10000):
+	def __init__(self, memory_size=1000000, burn_in=10000):
 
 		# The memory essentially stores transitions recorder from the agent
 		# taking actions in the environment.
@@ -191,7 +191,7 @@ class Replay_Memory():
 		self.burn_in = burn_in
 		pass
 
-	def sample_batch(self, batch_size=1):
+	def sample_batch(self, batch_size=32):
 		# This function returns a batch of randomly sampled transitions - i.e. state, action, reward, next state, terminal flag tuples. 
 		# You will feed this to your model to train.
 		return random.sample(self.buffer, batch_size)
@@ -225,7 +225,7 @@ class DQN_Agent():
 		# self.env = gym.wrappers.Monitor(self.env, '.', force = True)
 		self.action_dim = self.env.action_space.n
 		self.epsilon = INIT_EPSILON # this value should be decayed
-		self.gamma = 0.9
+		self.gamma = 0.99
 		self.episode = 1000000
 
 	def epsilon_greedy_policy(self, q_values, epsilon):
