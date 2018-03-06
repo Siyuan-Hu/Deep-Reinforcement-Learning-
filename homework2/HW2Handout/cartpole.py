@@ -191,7 +191,7 @@ class Replay_Memory():
 		self.burn_in = burn_in
 		pass
 
-	def sample_batch(self, batch_size=32):
+	def sample_batch(self, batch_size = 1):
 		# This function returns a batch of randomly sampled transitions - i.e. state, action, reward, next state, terminal flag tuples. 
 		# You will feed this to your model to train.
 		return random.sample(self.buffer, batch_size)
@@ -219,6 +219,7 @@ class DQN_Agent():
 		# Here is also a good place to set environmental parameters,
 		# as well as training parameters - number of episodes / iterations, etc.
 		# self.q_network = QNetwork(environment_name, dueling = False, model = "./checkpoints/SpaceInvaders-v0-0")
+		self.environment_name = environment_name
 		self.q_network = QNetwork(environment_name)
 		self.replay_memory = Replay_Memory()
 		self.env = gym.make(environment_name)
@@ -247,6 +248,7 @@ class DQN_Agent():
 		# If you are using a replay memory, you should interact with environment here, and store these 
 		# transitions to memory, while also updating your model.
 		update_count = 0
+		test_count = 0
 		for i_episode in range(self.episode):
 			state = self.env.reset()
 			reward_sum = 0
@@ -292,8 +294,16 @@ class DQN_Agent():
 					self.replay_memory.append([state, action_input, target])
 
 				if len(self.replay_memory.buffer) >= self.replay_memory.burn_in:
+					if update_count == 0:
+						print("episode: ", i_episode, "test: ", test_count)
+						self.test()
+						if test_count % 50 == 0:
+							self.q_network.save_model_weights("./checkpoints/SpaceInvaders-v0", test_count)
+						test_count += 1
+
 					update_count += 1
-					print "update ", update_count
+					if update_count == 10000:
+						update_count = 0
 					# train
 					batch = self.replay_memory.sample_batch()
 					state_batch = []
@@ -317,20 +327,23 @@ class DQN_Agent():
 			# if reward_sum > -200:
 			# 	print("episode", i_episode, " reward: ", reward_sum)
 
-			if update_count > 1000:
-				update_count = 0
-				print("episode: ", i_episode)
-				self.test()
-				self.q_network.save_model_weights("./checkpoints/SpaceInvaders-v0", i_episode)
+			# if update_count > 1000:
+			# 	update_count = 0
+			# 	print("episode: ", i_episode)
+			# 	self.test()
+			# 	self.q_network.save_model_weights("./checkpoints/SpaceInvaders-v0", i_episode)
 
 
 	def test(self, model_file=None):
 		# Evaluate the performance of your agent over 100 episodes, by calculating cummulative rewards for the 100 episodes.
 		# Here you need to interact with the environment, irrespective of whether you are using a memory. 
-		episode_num = 10
+		episode_num = 20
 		total_reward = 0
+
+		env = gym.make(self.environment_name)
+
 		for i in range(episode_num):
-			state = self.env.reset()
+			state = env.reset()
 
 			if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
 				frame_batch = deque()
@@ -343,10 +356,10 @@ class DQN_Agent():
 				else:
 					q_values = self.q_network.get_q_values([state])[0]
 
-				self.env.render()
+				# env.render()
 				action = self.epsilon_greedy_policy(q_values, FINAL_EPSILON)
 
-				state, reward, done, info = self.env.step(action)
+				state, reward, done, info = env.step(action)
 
 				if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
 					frame_batch.append(state)
