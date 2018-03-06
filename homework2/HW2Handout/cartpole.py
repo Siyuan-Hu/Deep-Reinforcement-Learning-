@@ -79,28 +79,28 @@ class QNetwork():
 			name = "state_input")
 		converted_state = self.PreprocessState(self.state_input) # to 84*84*4
 
-		w_conv1 = self.CreateWeights([5, 5, CONSECUTIVE_FRAMES, 32])
-		b_conv1 = self.CreateBias([32])
+		w_conv1 = self.CreateWeights([8, 8, CONSECUTIVE_FRAMES, 16])
+		b_conv1 = self.CreateBias([16])
 
 		h_conv1 = tf.nn.relu(self.CreateConv2d(converted_state, w_conv1) + b_conv1)
 		h_pool1 = self.CreateMaxPool(h_conv1) # to 42*42*32
 
-		W_conv2 = self.CreateWeights([5, 5, 32, 64])
-		b_conv2 = self.CreateBias([64])
+		W_conv2 = self.CreateWeights([4, 4, 16, 32])
+		b_conv2 = self.CreateBias([32])
 
 		h_conv2 = tf.nn.relu(self.CreateConv2d(h_pool1, W_conv2) + b_conv2)
 		h_pool2 = self.CreateMaxPool(h_conv2) # to 21*21*64
 
-		W_fc1 = self.CreateWeights([21 * 21 * 64, 1024])
-		b_fc1 = self.CreateBias([1024])
+		W_fc1 = self.CreateWeights([21 * 21 * 32, 256])
+		b_fc1 = self.CreateBias([256])
 
-		h_pool2_flat = tf.reshape(h_pool2, [-1, 21 * 21 * 64])
+		h_pool2_flat = tf.reshape(h_pool2, [-1, 21 * 21 * 32])
 		h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
 		# self.keep_prob = tf.placeholder("float", name = "keep_prob")
 		h_fc1_drop = tf.nn.dropout(h_fc1, self.keep_prob)
 
-		W_fc2 = self.CreateWeights([1024, self.action_dim])
+		W_fc2 = self.CreateWeights([256, self.action_dim])
 		b_fc2 = self.CreateBias([self.action_dim])
 
 		self.q_values = tf.add(tf.matmul(h_fc1_drop, W_fc2), b_fc2, name = "q_values")
@@ -191,7 +191,7 @@ class Replay_Memory():
 		self.burn_in = burn_in
 		pass
 
-	def sample_batch(self, batch_size = 1):
+	def sample_batch(self, batch_size = 32):
 		# This function returns a batch of randomly sampled transitions - i.e. state, action, reward, next state, terminal flag tuples. 
 		# You will feed this to your model to train.
 		return random.sample(self.buffer, batch_size)
@@ -302,7 +302,7 @@ class DQN_Agent():
 						test_count += 1
 
 					update_count += 1
-					if update_count == 10000:
+					if update_count == 100:
 						update_count = 0
 					# train
 					batch = self.replay_memory.sample_batch()
