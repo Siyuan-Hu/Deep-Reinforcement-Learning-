@@ -249,6 +249,7 @@ class DQN_Agent():
 		# transitions to memory, while also updating your model.
 		update_count = 0
 		test_count = 0
+		max_reward = 0
 		for i_episode in range(self.episode):
 			state = self.env.reset()
 			reward_sum = 0
@@ -296,8 +297,10 @@ class DQN_Agent():
 				if len(self.replay_memory.buffer) >= self.replay_memory.burn_in:
 					if update_count == 0:
 						print("episode: ", i_episode, "test: ", test_count)
-						self.test()
-						if test_count % 50 == 0:
+						test_reward = self.test()
+						if test_reward >= max_reward:
+							print("save")
+							max_reward = test_reward
 							self.q_network.save_model_weights("./checkpoints/SpaceInvaders-v0", test_count)
 						test_count += 1
 
@@ -371,6 +374,7 @@ class DQN_Agent():
 					break
 		ave_reward = total_reward / episode_num
 		print 'Evaluation Average Reward:',ave_reward
+		return ave_reward
 
 	def burn_in_memory():
 		# Initialize your replay memory with a burn_in number of episodes / transitions. 
