@@ -171,11 +171,6 @@ class QNetwork():
 		self.optimizer = tf.get_collection("optimizer")[0]
 		pass
 
-	def load_model_weights(self,weight_file):
-		# Helper funciton to load model weights. 
-		file = open("./test", "r")
-		print file.readline()
-		pass
 
 class Replay_Memory():
 
@@ -307,7 +302,7 @@ class DQN_Agent():
 						test_count += 1
 
 					update_count += 1
-					if update_count == 1000:
+					if update_count == 5000:
 						update_count = 0
 					# train
 					batch = self.replay_memory.sample_batch()
@@ -319,9 +314,7 @@ class DQN_Agent():
 						action_batch.append(data[1])
 						target_batch.append(data[2])
 
-						self.q_network.optimizer.run(feed_dict = {self.q_network.state_input : state_batch, 
-							self.q_network.action_input : action_batch, 
-							self.q_network.target_q_value : target_batch, self.q_network.keep_prob : 0.5})
+					self.q_network.optimizer.run(feed_dict = {self.q_network.state_input : state_batch, self.q_network.action_input : action_batch, self.q_network.target_q_value : target_batch, self.q_network.keep_prob : 0.5})
 				
 				state = next_state
 				q_values = next_state_q_values
