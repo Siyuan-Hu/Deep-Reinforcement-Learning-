@@ -34,7 +34,7 @@ class QNetwork():
 			self.load_model(model)
 		else:
 			self.keep_prob = tf.placeholder(tf.float32, name = "keep_prob")
-			self.CreateLinearNetwork()
+			self.CreateMLP()
 			self.CreateOptimizer()
 
 	def CreateWeights(self, shape):
