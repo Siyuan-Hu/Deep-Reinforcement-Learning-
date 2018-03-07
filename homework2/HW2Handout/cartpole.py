@@ -25,7 +25,7 @@ class QNetwork():
 		for i in self.state_dim:
 			self.flat_state_dim *= i
 		self.action_dim = env.action_space.n
-		self.learning_rate = 0.0001
+		self.learning_rate = 0.01
 		self.dueling = dueling
 
 		self.session = tf.InteractiveSession()
@@ -270,6 +270,11 @@ class DQN_Agent():
 
 				next_state, reward, done, info = self.env.step(action)
 
+				if reward > 0:
+					reward = 1
+				if reward < 0:
+					reward = -1
+
 				reward_sum += reward
 
 				action_input = npy.zeros(self.action_dim)
@@ -305,7 +310,7 @@ class DQN_Agent():
 						test_count += 1
 
 					update_count += 1
-					if update_count == 100:
+					if update_count == 1000:
 						update_count = 0
 					# train
 					batch = self.replay_memory.sample_batch()
@@ -364,6 +369,11 @@ class DQN_Agent():
 
 				state, reward, done, info = env.step(action)
 
+				if reward > 0:
+					reward = 1
+				if reward < 0:
+					reward = -1
+
 				if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
 					frame_batch.append(state)
 					frame_batch.popleft()
@@ -374,6 +384,7 @@ class DQN_Agent():
 					break
 		ave_reward = total_reward / episode_num
 		print 'Evaluation Average Reward:',ave_reward
+		env.close()
 		return ave_reward
 
 	def burn_in_memory():
