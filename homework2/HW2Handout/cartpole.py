@@ -60,7 +60,7 @@ class QNetwork():
 		b_a = self.CreateBias([self.action_dim])
 		a_layer = tf.add(tf.matmul(last_layer, w_a), b_a)
 
-		self.q_values = tf.add(v_layer, a_layer - tf.reduce_mean(a_layer, axis = 1, keepdims = True))
+		self.q_values = tf.add(v_layer, a_layer - tf.reduce_mean(a_layer, axis = 1, keepdims = True), name = "q_values")
 
 	def ConvertImage(self, images):
 		gray_scale = tf.image.rgb_to_grayscale(images)
@@ -251,7 +251,7 @@ class DQN_Agent():
 		# transitions to memory, while also updating your model.
 		update_count = 0
 		test_count = 0
-		max_reward = 0
+		max_reward = -10000
 		for i_episode in range(self.episode):
 			state = self.env.reset()
 			reward_sum = 0
@@ -300,7 +300,7 @@ class DQN_Agent():
 					if update_count == 0:
 						print("episode: ", i_episode, "test: ", test_count)
 						test_reward = self.test()
-						if test_reward >= max_reward:
+						if test_reward > max_reward:
 							print("save")
 							max_reward = test_reward
 							self.q_network.save_model_weights("./checkpoints/MountainCar-v0", test_count)
