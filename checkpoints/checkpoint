@@ -1,2 +1,2 @@
-model_checkpoint_path: "CartPole-v0-347"
-all_model_checkpoint_paths: "CartPole-v0-347"
+model_checkpoint_path: "CartPole-v0-162"
+all_model_checkpoint_paths: "CartPole-v0-162"

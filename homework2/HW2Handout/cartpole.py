@@ -180,7 +180,7 @@ class QNetwork():
 class Replay_Memory():
 
 	# burn_in = 10000
-	def __init__(self, memory_size=1, burn_in=0):
+	def __init__(self, memory_size=50000, burn_in=10000):
 
 		# The memory essentially stores transitions recorder from the agent
 		# taking actions in the environment.
@@ -193,7 +193,7 @@ class Replay_Memory():
 		self.burn_in = burn_in
 		pass
 
-	def sample_batch(self, batch_size = 1):
+	def sample_batch(self, batch_size = 32):
 		# This function returns a batch of randomly sampled transitions - i.e. state, action, reward, next state, terminal flag tuples. 
 		# You will feed this to your model to train.
 		return random.sample(self.buffer, batch_size)
@@ -307,7 +307,7 @@ class DQN_Agent():
 						test_count += 1
 
 					update_count += 1
-					if update_count == 10000:
+					if update_count == 5000:
 						update_count = 0
 					# train
 					batch = self.replay_memory.sample_batch()
@@ -319,7 +319,7 @@ class DQN_Agent():
 						action_batch.append(data[1])
 						target_batch.append(data[2])
 
-						self.q_network.optimizer.run(feed_dict = {self.q_network.state_input : state_batch, 
+					self.q_network.optimizer.run(feed_dict = {self.q_network.state_input : state_batch, 
 							self.q_network.action_input : action_batch, 
 							self.q_network.target_q_value : target_batch, self.q_network.keep_prob : 0.5})
 				
