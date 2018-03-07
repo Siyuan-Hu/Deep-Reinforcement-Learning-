@@ -100,10 +100,12 @@ class QNetwork():
 		# self.keep_prob = tf.placeholder("float", name = "keep_prob")
 		h_fc1_drop = tf.nn.dropout(h_fc1, self.keep_prob)
 
-		W_fc2 = self.CreateWeights([256, self.action_dim])
-		b_fc2 = self.CreateBias([self.action_dim])
-
-		self.q_values = tf.add(tf.matmul(h_fc1_drop, W_fc2), b_fc2, name = "q_values")
+		if self.dueling:
+			self.CreateDuelingLayer(h_fc1_drop, 256)
+		else:
+			W_fc2 = self.CreateWeights([256, self.action_dim])
+			b_fc2 = self.CreateBias([self.action_dim])
+			self.q_values = tf.add(tf.matmul(h_fc1_drop, W_fc2), b_fc2, name = "q_values")
 
 	def CreateMLP(self):
 		self.hidden_units = 20
@@ -218,7 +220,7 @@ class DQN_Agent():
 		# Create an instance of the network itself, as well as the memory. 
 		# Here is also a good place to set environmental parameters,
 		# as well as training parameters - number of episodes / iterations, etc.
-		# self.q_network = QNetwork(environment_name, dueling = False, model = "./checkpoints/SpaceInvaders-v0-0")
+		# self.q_network = QNetwork(environment_name, dueling = True, model = "./checkpoints/SpaceInvaders-v0-0")
 		self.environment_name = environment_name
 		self.q_network = QNetwork(environment_name)
 		self.replay_memory = Replay_Memory()
@@ -301,11 +303,11 @@ class DQN_Agent():
 						if test_reward >= max_reward:
 							print("save")
 							max_reward = test_reward
-							self.q_network.save_model_weights("./checkpoints/SpaceInvaders-v0", test_count)
+							self.q_network.save_model_weights("./checkpoints/Dueling-SpaceInvaders-v0", test_count)
 						test_count += 1
 
 					update_count += 1
-					if update_count == 100:
+					if update_count == 1000:
 						update_count = 0
 					# train
 					batch = self.replay_memory.sample_batch()
@@ -374,6 +376,7 @@ class DQN_Agent():
 					break
 		ave_reward = total_reward / episode_num
 		print 'Evaluation Average Reward:',ave_reward
+		env.close()
 		return ave_reward
 
 	def burn_in_memory():
