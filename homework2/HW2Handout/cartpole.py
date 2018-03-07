@@ -139,10 +139,12 @@ class QNetwork():
 			self.q_values = tf.add(tf.matmul(self.flat_state, w), b, name = "q_values")
 
 	def CreateOptimizer(self):
+		self.ISWeights = tf.placeholder(tf.float32, [None, 1], name='IS_weights')
 		self.action_input = tf.placeholder(tf.float32, [None, self.action_dim], name = "action_input")
 		self.target_q_value = tf.placeholder(tf.float32, [None], name = "target_q_value")
 		q_value_output = tf.reduce_sum(tf.multiply(self.q_values, self.action_input), 1)
-		cost = tf.reduce_mean(tf.square(tf.subtract(self.target_q_value, q_value_output)))
+		self.abs_errors = tf.reduce_sum(tf.abs(self.target_q_value - q_value_output), name = "abs_errors")
+		cost = tf.reduce_mean(self.ISWeights * tf.square(tf.subtract(self.target_q_value, q_value_output)))
 		self.optimizer = tf.train.AdamOptimizer(self.learning_rate).minimize(cost, name = "optimizer")
 
 		self.session.run(tf.global_variables_initializer())
@@ -168,6 +170,8 @@ class QNetwork():
 		self.action_input = graph.get_tensor_by_name("action_input:0")
 		self.target_q_value = graph.get_tensor_by_name("target_q_value:0")
 		self.keep_prob = graph.get_tensor_by_name("keep_prob:0")
+		self.ISWeights = graph.get_tensor_by_name("ISWeights:0")
+		self.abs_errors = graph.get_tensor_by_name("abs_errors:0")
 		self.optimizer = tf.get_collection("optimizer")[0]
 		pass
 
@@ -176,6 +180,119 @@ class QNetwork():
 		file = open("./test", "r")
 		print file.readline()
 		pass
+
+
+class SumTree(object):
+    """
+    This SumTree code is modified version and the original code is from: 
+    https://github.com/jaara/AI-blog/blob/master/SumTree.py
+    Story the data with it priority in tree and data frameworks.
+    """
+    data_pointer = 0
+
+    def __init__(self, capacity):
+        self.capacity = capacity  # for all priority values
+        self.tree = npy.zeros(2 * capacity - 1)
+        # [--------------Parent nodes-------------][-------leaves to recode priority-------]
+        #             size: capacity - 1                       size: capacity
+        self.data = npy.zeros(capacity, dtype=object)  # for all transitions
+        # [--------------data frame-------------]
+        #             size: capacity
+
+    def add(self, p, data):
+        tree_idx = self.data_pointer + self.capacity - 1
+        self.data[self.data_pointer] = data  # update data_frame
+        self.update(tree_idx, p)  # update tree_frame
+
+        self.data_pointer += 1
+        if self.data_pointer >= self.capacity:  # replace when exceed the capacity
+            self.data_pointer = 0
+
+    def update(self, tree_idx, p):
+        change = p - self.tree[tree_idx]
+        self.tree[tree_idx] = p
+        # then propagate the change through tree
+        while tree_idx != 0:    # this method is faster than the recursive loop in the reference code
+            tree_idx = (tree_idx - 1) // 2
+            self.tree[tree_idx] += change
+
+    def get_leaf(self, v):
+        """
+        Tree structure and array storage:
+        Tree index:
+             0         -> storing priority sum
+            / \
+          1     2
+         / \   / \
+        3   4 5   6    -> storing priority for transitions
+        Array type for storing:
+        [0,1,2,3,4,5,6]
+        """
+        parent_idx = 0
+        while True:     # the while loop is faster than the method in the reference code
+            cl_idx = 2 * parent_idx + 1         # this leaf's left and right kids
+            cr_idx = cl_idx + 1
+            if cl_idx >= len(self.tree):        # reach bottom, end search
+                leaf_idx = parent_idx
+                break
+            else:       # downward search, always search for a higher priority node
+                if v <= self.tree[cl_idx]:
+                    parent_idx = cl_idx
+                else:
+                    v -= self.tree[cl_idx]
+                    parent_idx = cr_idx
+
+        data_idx = leaf_idx - self.capacity + 1
+        return leaf_idx, self.tree[leaf_idx], self.data[data_idx]
+
+    @property
+    def total_p(self):
+        return self.tree[0]  # the root
+
+
+class Memory(object):  # stored as ( s, a, r, s_ ) in SumTree
+    """
+    This SumTree code is modified version and the original code is from:
+    https://github.com/jaara/AI-blog/blob/master/Seaquest-DDQN-PER.py
+    """
+    epsilon = 0.01  # small amount to avoid zero priority
+    alpha = 0.6  # [0~1] convert the importance of TD error to priority
+    beta = 0.4  # importance-sampling, from initial value increasing to 1
+    beta_increment_per_sampling = 0.001
+    abs_err_upper = 1.  # clipped abs error
+
+    def __init__(self):
+    	self.capacity = 50000
+    	self.burn_in = 10000
+        self.tree = SumTree(self.capacity)
+
+    def store(self, transition):
+        max_p = npy.max(self.tree.tree[-self.tree.capacity:])
+        if max_p == 0:
+            max_p = self.abs_err_upper
+        self.tree.add(max_p, transition)   # set the max p for new p
+
+    def sample(self, n = 32):
+        b_idx, b_memory, ISWeights = npy.empty((n,), dtype=npy.int32), npy.empty((n, self.tree.data[0].size)), npy.empty((n, 1))
+        pri_seg = self.tree.total_p / n       # priority segment
+        self.beta = npy.min([1., self.beta + self.beta_increment_per_sampling])  # max = 1
+
+        min_prob = npy.min(self.tree.tree[-self.tree.capacity:]) / self.tree.total_p     # for later calculate ISweight
+        for i in range(n):
+            a, b = pri_seg * i, pri_seg * (i + 1)
+            v = npy.random.uniform(a, b)
+            idx, p, data = self.tree.get_leaf(v)
+            prob = p / self.tree.total_p
+            ISWeights[i, 0] = npy.power(prob/min_prob, -self.beta)
+            b_idx[i], b_memory[i, :] = idx, data
+        return b_idx, b_memory, ISWeights
+
+    def batch_update(self, tree_idx, abs_errors):
+        abs_errors += self.epsilon  # convert to abs and avoid 0
+        clipped_errors = npy.minimum(abs_errors, self.abs_err_upper)
+        ps = npy.power(clipped_errors, self.alpha)
+        for ti, p in zip(tree_idx, ps):
+            self.tree.update(ti, p)
 
 class Replay_Memory():
 
@@ -230,6 +347,8 @@ class DQN_Agent():
 		self.epsilon = INIT_EPSILON # this value should be decayed
 		self.gamma = 0.99
 		self.episode = 1000000
+
+		self.memory = Memory()
 
 	def epsilon_greedy_policy(self, q_values, epsilon):
 		# Creating epsilon greedy probabilities to sample from.     
@@ -291,12 +410,14 @@ class DQN_Agent():
 
 
 				if ENVIRONMENT_NAME == 'SpaceInvaders-v0' and MODEL == 'CNN':
-					self.replay_memory.append([frame_batch, action_input, target])
+					# self.replay_memory.append([frame_batch, action_input, target])
+					self.memory.store([frame_batch, action_input, target])
 					frame_batch = next_frame_batch
 				else:
-					self.replay_memory.append([state, action_input, target])
+					self.memory.store([state, action_input, target])
+					# self.replay_memory.append([state, action_input, target])
 
-				if len(self.replay_memory.buffer) >= self.replay_memory.burn_in:
+				if self.memory.capacity >= self.memory.burn_in:
 					if update_count == 0:
 						print("episode: ", i_episode, "test: ", test_count)
 						test_reward = self.test()
@@ -310,7 +431,7 @@ class DQN_Agent():
 					if update_count == 1000:
 						update_count = 0
 					# train
-					batch = self.replay_memory.sample_batch()
+					tree_idx, batch, ISWeights = self.memory.sample()
 					state_batch = []
 					action_batch = []
 					target_batch = []
@@ -319,9 +440,15 @@ class DQN_Agent():
 						action_batch.append(data[1])
 						target_batch.append(data[2])
 
-						self.q_network.optimizer.run(feed_dict = {self.q_network.state_input : state_batch, 
-							self.q_network.action_input : action_batch, 
-							self.q_network.target_q_value : target_batch, self.q_network.keep_prob : 0.5})
+					self.q_network.optimizer.run(feed_dict = {self.q_network.state_input : state_batch, 
+						self.q_network.action_input : action_batch, 
+						self.q_network.target_q_value : target_batch, self.q_network.keep_prob : 0.5})
+
+					abs_errors = self.q_network.abs_errors.eval(feed_dict = {self.q_network.state_input : state_batch, 
+						self.q_network.action_input : action_batch, 
+						self.q_network.target_q_value : target_batch, self.q_network.keep_prob : 0.5})
+					self.memory.batch_update(tree_idx, abs_errors)
+
 				
 				state = next_state
 				q_values = next_state_q_values
