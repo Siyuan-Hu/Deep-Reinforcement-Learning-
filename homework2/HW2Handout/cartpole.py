@@ -16,7 +16,7 @@ class QNetwork():
 	# The network should take in state of the world as an input, 
 	# and output Q values of the actions available to the agent as the output. 
 
-	def __init__(self, environment_name, dueling = False, model = None):
+	def __init__(self, environment_name, dueling = True, model = None):
 		# Define your network architecture here. It is also a good idea to define any training operations 
 		# and optimizers here, initialize your variables, or alternately compile your model here.
 		env = gym.make(environment_name)
@@ -52,12 +52,12 @@ class QNetwork():
 		return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 	def CreateDuelingLayer(self, last_layer, unit_num):
-		w_v = tf.Variable(tf.random_normal([unit_num, 1]))
-		b_v = tf.Variable(tf.random_normal([1]))
+		w_v = self.CreateWeights([unit_num, 1])
+		b_v = self.CreateBias([1])
 		v_layer = tf.add(tf.matmul(last_layer, w_v), b_v)
 
-		w_a = tf.Variable(tf.random_normal([unit_num, self.action_dim]))
-		b_a = tf.Variable(tf.random_normal([self.action_dim]))
+		w_a = self.CreateWeights([unit_num, self.action_dim])
+		b_a = self.CreateBias([self.action_dim])
 		a_layer = tf.add(tf.matmul(last_layer, w_a), b_a)
 
 		self.q_values = tf.add(v_layer, a_layer - tf.reduce_mean(a_layer, axis = 1, keepdims = True))
@@ -110,8 +110,8 @@ class QNetwork():
 	def CreateMLP(self):
 		self.hidden_units = 20
 
-		self.w1 = tf.Variable(tf.random_normal([self.flat_state_dim, self.hidden_units]))
-		self.b1 = tf.Variable(tf.random_normal([self.hidden_units]))
+		self.w1 = self.CreateWeights([self.flat_state_dim, self.hidden_units])
+		self.b1 = self.CreateBias([self.hidden_units])
 
 		self.state_input = tf.placeholder(tf.float32, [None] + self.state_dim, name = "state_input")
 
@@ -122,8 +122,8 @@ class QNetwork():
 		if self.dueling:
 			self.CreateDuelingLayer(h_layer, self.hidden_units)
 		else:
-			self.w2 = tf.Variable(tf.random_normal([self.hidden_units, self.action_dim]))
-			self.b2 = tf.Variable(tf.random_normal([self.action_dim]))
+			self.w2 = self.CreateWeights([self.hidden_units, self.action_dim])
+			self.b2 = self.CreateBias([self.action_dim])
 			self.q_values = tf.add(tf.matmul(h_layer, self.w2), self.b2, name = "q_values")
 
 	def CreateLinearNetwork(self):
@@ -134,8 +134,8 @@ class QNetwork():
 		if self.dueling:
 			self.CreateDuelingLayer(flat_state, self.flat_state_dim)
 		else:
-			w = tf.Variable(tf.zeros([self.flat_state_dim, self.action_dim]))
-			b = tf.Variable(tf.zeros([self.action_dim]))
+			w = self.CreateWeights([self.flat_state_dim, self.action_dim])
+			b = self.CreateBias([self.action_dim])
 			self.q_values = tf.add(tf.matmul(flat_state, w), b, name = "q_values")
 
 	def CreateOptimizer(self):
