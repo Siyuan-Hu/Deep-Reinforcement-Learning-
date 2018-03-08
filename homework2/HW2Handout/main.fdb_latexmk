@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1519513309 "main.aux" "main.bbl" "main" 1520132700
+["bibtex main"] 1519513309 "main.aux" "main.bbl" "main" 1520485569
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/base/plain.bst" 1480098433 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
   "deeprlhw2.bib" 1519262860 1187 1d7566e5907ca29ed5e2f0032a0dba0b ""
-  "main.aux" 1519513720 1920 a53e647d3413a57b899c6c05a02d4101 ""
+  "main.aux" 1520485568 1920 a53e647d3413a57b899c6c05a02d4101 ""
   (generated)
   "main.blg"
   "main.bbl"
-["pdflatex"] 1519513717 "main.tex" "main.pdf" "main" 1520132700
+["pdflatex"] 1520485564 "main.tex" "main.pdf" "main" 1520485569
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1480098698 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm" 1480098698 1120 7f9f170e8aa57527ad6c49feafd45d54 ""
@@ -221,12 +221,21 @@
   "/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1495593472 2350277 a699055bee05bf8a40b0504752487295 ""
   "/usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1518237061 4129591 551f1ba89ea7bd32c95027ec9ebc66c0 ""
   "/usr/local/texlive/2017/texmf.cnf" 1495593465 577 2b71d4d888f9e5560b2e99985915a9fa ""
-  "main.aux" 1519513720 1920 a53e647d3413a57b899c6c05a02d4101 ""
-  "main.bbl" 1519513309 1028 e5ef0f7ac2429108ea70475d8fa1ef80 "bibtex main"
-  "main.out" 1519513720 107 24badbc0d165ad49c736ae2e0e0603ad ""
-  "main.tex" 1519513716 26784 f9f7ef0c905815dcc0bc5ff24e9f3183 ""
+  "figures/MLP_cartpole.png" 1520425178 45454 67c30b14e6254eab3c31a97f57b746e6 ""
+  "figures/MLP_mountaincar.png" 1520460688 64165 b308166350d60c4bade9b9074e43c574 ""
+  "figures/duel_cartpole.png" 1520429887 45433 c79c5f51a84a18a6fe0b46bafc5c19a6 ""
+  "figures/duel_mountaincar.png" 1520466091 59513 4d558fcacb71fa600ec249b29e869c16 ""
+  "figures/experience_cartpole.png" 1520423796 41584 ba48b1fa9211b4a2ac865ec19691ff9b ""
+  "figures/experience_mountaincar.png" 1520479343 41783 d00e22a123eab3c3269fd5edc2d474e7 ""
+  "figures/linear_cartpole.png" 1520419033 55661 1bfb5e1ea50deab36a0c47c590d55593 ""
+  "figures/linear_mountaincar.png" 1520437233 41725 e5956d78e847b6890a5a6ce52bb369ed ""
+  "figures/spaceinvader.png" 1520456677 87243 acf7613795eb107a720d1f413f1a42c8 ""
+  "main.aux" 1520485568 1920 a53e647d3413a57b899c6c05a02d4101 ""
+  "main.bbl" 1520468936 1028 e5ef0f7ac2429108ea70475d8fa1ef80 "bibtex main"
+  "main.out" 1520485568 107 24badbc0d165ad49c736ae2e0e0603ad ""
+  "main.tex" 1520485562 30651 33f4a2633fa3d352cbc2d73eee807f7e ""
   (generated)
-  "main.out"
+  "main.pdf"
   "main.aux"
   "main.log"
-  "main.pdf"
+  "main.out"

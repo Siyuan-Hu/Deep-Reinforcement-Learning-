@@ -1,0 +1,259 @@
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+('episode: ', 49, 'test: ', 0)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+save
+('episode: ', 74, 'test: ', 1)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 99, 'test: ', 2)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 124, 'test: ', 3)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 149, 'test: ', 4)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 174, 'test: ', 5)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 199, 'test: ', 6)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 224, 'test: ', 7)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 249, 'test: ', 8)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 274, 'test: ', 9)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 299, 'test: ', 10)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 324, 'test: ', 11)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 349, 'test: ', 12)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 374, 'test: ', 13)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 399, 'test: ', 14)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 424, 'test: ', 15)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 449, 'test: ', 16)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 474, 'test: ', 17)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 499, 'test: ', 18)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 524, 'test: ', 19)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 549, 'test: ', 20)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 574, 'test: ', 21)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 599, 'test: ', 22)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 624, 'test: ', 23)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 649, 'test: ', 24)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 674, 'test: ', 25)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 699, 'test: ', 26)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 724, 'test: ', 27)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 749, 'test: ', 28)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 774, 'test: ', 29)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 799, 'test: ', 30)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 824, 'test: ', 31)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 849, 'test: ', 32)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 874, 'test: ', 33)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 899, 'test: ', 34)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 924, 'test: ', 35)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 949, 'test: ', 36)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 974, 'test: ', 37)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 999, 'test: ', 38)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1024, 'test: ', 39)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1049, 'test: ', 40)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1074, 'test: ', 41)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1099, 'test: ', 42)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1124, 'test: ', 43)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1149, 'test: ', 44)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1174, 'test: ', 45)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1199, 'test: ', 46)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1224, 'test: ', 47)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1249, 'test: ', 48)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1274, 'test: ', 49)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1299, 'test: ', 50)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1324, 'test: ', 51)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1349, 'test: ', 52)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1374, 'test: ', 53)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1399, 'test: ', 54)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1424, 'test: ', 55)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1449, 'test: ', 56)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1474, 'test: ', 57)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1499, 'test: ', 58)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1524, 'test: ', 59)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1549, 'test: ', 60)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1574, 'test: ', 61)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1599, 'test: ', 62)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1624, 'test: ', 63)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1649, 'test: ', 64)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1674, 'test: ', 65)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1699, 'test: ', 66)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1724, 'test: ', 67)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1749, 'test: ', 68)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1774, 'test: ', 69)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1799, 'test: ', 70)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1824, 'test: ', 71)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1849, 'test: ', 72)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1874, 'test: ', 73)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1899, 'test: ', 74)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1924, 'test: ', 75)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1949, 'test: ', 76)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1974, 'test: ', 77)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 1999, 'test: ', 78)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 2024, 'test: ', 79)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 2049, 'test: ', 80)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 2074, 'test: ', 81)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 2099, 'test: ', 82)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -200.0
+('episode: ', 2128, 'test: ', 83)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -133.55
+save
+('episode: ', 2156, 'test: ', 84)
+WARN: gym.spaces.Box autodetected dtype as <type 'numpy.float32'>. Please provide explicit dtype.
+Evaluation Average Reward: -172.4
+('episode: ', 2181, 'test: ', 85)
