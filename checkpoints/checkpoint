@@ -1,2 +1,2 @@
-model_checkpoint_path: "MountainCar-v0-190"
-all_model_checkpoint_paths: "MountainCar-v0-190"
+model_checkpoint_path: "MountainCar-v0-83"
+all_model_checkpoint_paths: "MountainCar-v0-83"
