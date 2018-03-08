@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1520543666 "main.aux" "main.bbl" "main" 1520543706
+["bibtex main"] 1520543666 "main.aux" "main.bbl" "main" 1520545856
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/base/plain.bst" 1480098433 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
   "deeprlhw2.bib" 1519262860 1187 1d7566e5907ca29ed5e2f0032a0dba0b ""
-  "main.aux" 1520543705 1920 a53e647d3413a57b899c6c05a02d4101 ""
+  "main.aux" 1520545855 1920 a53e647d3413a57b899c6c05a02d4101 ""
   (generated)
   "main.blg"
   "main.bbl"
-["pdflatex"] 1520543701 "main.tex" "main.pdf" "main" 1520543706
+["pdflatex"] 1520545851 "main.tex" "main.pdf" "main" 1520545856
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1480098698 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm" 1480098698 1120 7f9f170e8aa57527ad6c49feafd45d54 ""
@@ -230,12 +230,12 @@
   "figures/linear_cartpole.png" 1520419033 55661 1bfb5e1ea50deab36a0c47c590d55593 ""
   "figures/linear_mountaincar.png" 1520437233 41725 e5956d78e847b6890a5a6ce52bb369ed ""
   "figures/spaceinvader.png" 1520456677 87243 acf7613795eb107a720d1f413f1a42c8 ""
-  "main.aux" 1520543705 1920 a53e647d3413a57b899c6c05a02d4101 ""
+  "main.aux" 1520545855 1920 a53e647d3413a57b899c6c05a02d4101 ""
   "main.bbl" 1520543666 1028 e5ef0f7ac2429108ea70475d8fa1ef80 "bibtex main"
-  "main.out" 1520543705 107 24badbc0d165ad49c736ae2e0e0603ad ""
-  "main.tex" 1520543700 31810 aa78441da2dac4b0fdf4cf7dc7eb2d9e ""
+  "main.out" 1520545855 107 24badbc0d165ad49c736ae2e0e0603ad ""
+  "main.tex" 1520545850 31761 f9cc38d5662997fbcb8f517de05fe755 ""
   (generated)
-  "main.out"
-  "main.pdf"
   "main.log"
+  "main.pdf"
   "main.aux"
+  "main.out"

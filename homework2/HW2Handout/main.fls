@@ -334,6 +334,8 @@ INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
+INPUT main.bbl
+INPUT main.bbl
 INPUT figures/linear_cartpole.png
 INPUT ./figures/linear_cartpole.png
 INPUT ./figures/linear_cartpole.png
@@ -361,8 +363,6 @@ INPUT ./figures/duel_mountaincar.png
 INPUT figures/spaceinvader.png
 INPUT ./figures/spaceinvader.png
 INPUT ./figures/spaceinvader.png
-INPUT main.bbl
-INPUT main.bbl
 INPUT main.aux
 INPUT ./main.out
 INPUT ./main.out

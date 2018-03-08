@@ -245,18 +245,6 @@ Try to keep your implementation modular. Once you have the basic DQN working it 
     
     Are you able to solve both environments with a linear network? Why or why not? 
 
-	\begin{solution}
-		\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/linear_cartpole.png}
-	  	\end{center}
-	  	\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/linear_mountaincar.png}
-	  	\end{center}
-
-	  	I'm able to solve MountainCar-v0 with linear network. Because there is a linear policy to reach the goal.(Go left when at left cliff, go right when at right cliff.)
-	  	For CartPole-v0, the network has the trend to converge, but it takes too many iterations. I think linear network can also solve this envirment, because there is a linear policy that cart goes left when it leans left, goes right when it leans right to keep balance. 
-	\end{solution}
-
     \item \textbf{[15pts]} Implement a linear Q-network with experience replay. Use the experimental setup of~\cite{mnih2013playing, mnih2015human} to the extent possible. Use this as an opportunity to work out any bugs with your replay memory.
     
     You can refer to the \texttt{Replay\_Memory} class in the code. You may need the following functions: 
@@ -268,118 +256,19 @@ Try to keep your implementation modular. Once you have the basic DQN working it 
     \end{itemize}
               
     As above, train your network (separately) on both the \texttt{CartPole-v0} environment and the \texttt{MountainCar-v0} environment. Does adding experience replay improve learning? 
-
-	\begin{solution}
-		\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/experience_cartpole.png}
-	  	\end{center}
-	  	\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/experience_mountaincar.png}
-	  	\end{center}
-
-	  	Here I set batch size as 32, Memory size as 50000, burn in size as 10000.
-	  	After adding experience replay, I can solve both evironments in a reasonable time.\\
-	  	But the training is not stable, the reward will diverge after it reach the goal.
-	\end{solution}
              
 	\item \textbf{[20pts]} Implement a deep Q-network, similar to that described in~\cite{mnih2013playing, mnih2015human}. While these papers use a convolutional architecture to address the image based state representation of Atari environments, a multi-layer Perceptron with $3$ hidden units should suffice for the environments. 
 	
 	Document any changes to your training procedure, optimization, etc. that you make to train your deep Q-network, as compared to the linear case. How does using this deep Q-network affect performance, convergence rate, and stability of training on both \texttt{Cartpole-v0} and \texttt{MountainCar-v0}?
 	
 	You may use the cluster to train this agent \textit{once you have worked out the bugs}, although these environments are simple enough that you may solve them on your own laptop in a few hours. 
-
-	\begin{solution}
-		\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/MLP_cartpole.png}
-	  	\end{center}
-	  	\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/MLP_mountaincar.png}
-	  	\end{center}
-
-	  	For the network architecture, I used one input layer which takes state, one hidden layer with 20 units and one output layer which corresbonds to the Q values to each state. 
-	  	I used Adam as the optimizer to minimize the loss.
-	  	Also I included experience replay in this model.\\
-	  	\\
-    	For both evironments, the model increased the convergence rate and stability. The reward could be converged within less iterations. But for MountainCar-v0, the average rewards get decreased a little bit.
-	\end{solution}
 	
     \item \textbf{[15pts]} Implement the dueling deep Q-network as described in~\cite{wang2015dueling}.
     Train your network (separately) on both the \texttt{CartPole-v0} environment and the \texttt{MountainCar-v0} environment. How does adding the two stream architecture affect performance?\\
-
-	\begin{solution}
-		\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/duel_cartpole.png}
-	  	\end{center}
-	  	\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/duel_mountaincar.png}
-	  	\end{center}
-
-	  	After adding the dueling layer, both envirments get converged with less iterations. The training becomes more stable and is less likely to diverge.
-	\end{solution}
     
     \item \textbf{Extra Credit: [+10 pts]}  Implement a deep Q-network (dueling deep Q-network not required) using a convolutional architecture to solve the \texttt{SpaceInvaders-v0} environment. Train your network by passing in $4$ consecutive frames from the environment, as described in \cite{mnih2015human, mnih2013playing}. 
     
     Modify your replay memory to store images, preprocess them as necessary (resizing / normalization, etc.), and sample frames to provide to the network for training. You may find it necessary to implement a Target Q Network (as in the double Q learning paper \cite{van2016deep}) to stabilize training of the networks. Document these changes in your report.
-
-	\begin{solution}
-		\begin{center}
-			\includegraphics[width=1.0\textwidth]{figures/spaceinvader.png}
-	  	\end{center}
-
-	  	For the network architecture, I combined convolutional neuro network with dueling layer.\\
-		The raw input is $210 \times 160$ pixels with 128 possible colors.\\
-		I convert the images to grayscale and then resize the images to 84 x 84 pixels.\\
-		I use every 4 frames as one single state.\\
-		The input layer shape is $None \times 84 \times 84 \times 4$.\\
-		The output layer is the Q values for each state.\\
-		Between input and output, there are 16 $8 \times 8$ con2d, ReLU $\to$ $2 \times 2$ maxpool $\to$ 32 $4 \times 4$ con2d, ReLU $\to$ $2 \times 2$ maxpool $\to$ 256 full connection, ReLU $\to$ Dropout $\to$ Dueling layer $\to$ Q values.
-	\end{solution}
-
-
-	\begin{solution}
-		$R_{avg}$ is average total reward per episode in 100 episodes by fully trained model.
-		\begin{center}
-		  \begin{tabular}{|c|c|c|c|}\hline
-		    {\bf Model} & {\bf $R_{avg}$ in CartPole-v0 } & {\bf $R_{avg}$ in  MountainCar-v0} \\ \hline
-		    linear Q-network & $34.48 \pm 13.35$ & $-121.49 \pm 9.87$ \\ \hline
-		    {\shortstack{linear Q-network with  \\ experience replay }} & $200 \pm 0$ & $-130.97 \pm 19.84$ \\ \hline
-		    MLP DQN & $200 \pm 0$ & $-134 \pm 17.45$ \\ \hline
-		    Dueling MLP DQN & $200 \pm 0$ & $-150.27 \pm 35$ \\ \hline
-		  \end{tabular}
-		\end{center}
-		\begin{center}
-		  \begin{tabular}{|c|c|c|c|}\hline
-		    {\bf Model} & {\bf $R_{avg}$ in SpaceInvader-v0 } \\ \hline
-		    CNN DQN & $273.3 \pm 125.32$\\ \hline
-		  \end{tabular}
-		\end{center}
-	\end{solution}
-
-	\begin{solution}
-		Assume this is our loss function.
-		\begin{align*}
-			\ell (w) = \mathbb E _{s, a, r, s'} 
-				\left( 
-					r + \gamma \max _{a' \in A} Q _w(s', a')
-						- Q _w(s, a) 
-				\right) ^2 ,
-		\end{align*}
-
-		The loss function use mean squared error. To minimize the loss function, we need to adjust the weight vector by a small amount at each step in the direction that would most reduce the error. To do this, we need to get the gradiant by calculating the derivative with respect to $w$.\\
-		\\
-		So we have:\\
-
-			$\nabla \ell (w) = \nabla _w(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a)) ^2\\
-			= 2(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w (r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\\
-			= - 2(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w Q _w(s, a)$\\
-
-
-		Where $\alpha \in \mathbb R$ is the learning rate. Thus we can update $w$ as:\\
-		
-		$w := w - \frac{1}{2}\alpha \nabla \ell (w) = w + \alpha (r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w Q _w(s, a)$\\
-	\end{solution}
-
-    
     
 \end{enumerate}
 
@@ -487,8 +376,125 @@ This is a challenging assignment.
 
 
 \newpage
-\textbf{Write-up for implementation section: }
+\textbf{Write-up for implementation section: }\\
 
+\textbf{Linear Network: }\\
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/linear_cartpole.png}
+\end{center}
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/linear_mountaincar.png}
+\end{center}
+
+I'm able to solve MountainCar-v0 with linear network. Because there is a linear policy to reach the goal.(Go left when at left cliff, go right when at right cliff.)
+For CartPole-v0, the network has the trend to converge, but it takes too many iterations. I think linear network can also solve this envirment, because there is a linear policy that cart goes left when it leans left, goes right when it leans right to keep balance.\\
+
+\textbf{Experience Replay: }\\
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/experience_cartpole.png}
+\end{center}
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/experience_mountaincar.png}
+\end{center}
+
+Here I set batch size as 32, Memory size as 50000, burn in size as 10000.
+After adding experience replay, I can solve both evironments in a reasonable time.\\
+But the training is not stable, the reward will diverge after it reach the goal.\\
+
+\textbf{Deep Q Network (MLP): }\\
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/MLP_cartpole.png}
+\end{center}
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/MLP_mountaincar.png}
+\end{center}
+
+For the network architecture, I used one input layer which takes state, one hidden layer with 20 units and one output layer which corresbonds to the Q values to each state. 
+I used Adam as the optimizer to minimize the loss.
+Also I included experience replay in this model.\\
+\\
+For both evironments, the model increased the convergence rate and stability. The reward could be converged within less iterations. But for MountainCar-v0, the average rewards get decreased a little bit.\\
+
+\textbf{Dueling Network: }\\
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/duel_cartpole.png}
+\end{center}
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/duel_mountaincar.png}
+\end{center}
+
+After adding the dueling layer, both envirments get converged with less iterations. The training becomes more stable and is less likely to diverge.\\
+
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+~\\
+
+\textbf{SpaceInvader: }\\
+\begin{center}
+	\includegraphics[width=1.0\textwidth]{figures/spaceinvader.png}
+\end{center}
+
+For the network architecture, I combined convolutional neuro network with dueling layer.\\
+The raw input is $210 \times 160$ pixels with 128 possible colors.\\
+I convert the images to grayscale and then resize the images to 84 x 84 pixels.\\
+I use every 4 frames as one single state.\\
+The input layer shape is $None \times 84 \times 84 \times 4$.\\
+The output layer is the Q values for each state.\\
+Between input and output, there are 16 $8 \times 8$ con2d, ReLU $\to$ $2 \times 2$ maxpool $\to$ 32 $4 \times 4$ con2d, ReLU $\to$ $2 \times 2$ maxpool $\to$ 256 full connection, ReLU $\to$ Dropout $\to$ Dueling layer $\to$ Q values.\\
+
+\textbf{Reward Table: }\\
+$R_{avg}$ is average total reward per episode in 100 episodes by fully trained model.
+\begin{center}
+  \begin{tabular}{|c|c|c|c|}\hline
+    {\bf Model} & {\bf $R_{avg}$ in CartPole-v0 } & {\bf $R_{avg}$ in  MountainCar-v0} \\ \hline
+    linear Q-network & $34.48 \pm 13.35$ & $-121.49 \pm 9.87$ \\ \hline
+    {\shortstack{linear Q-network with  \\ experience replay }} & $200 \pm 0$ & $-130.97 \pm 19.84$ \\ \hline
+    MLP DQN & $200 \pm 0$ & $-134 \pm 17.45$ \\ \hline
+    Dueling MLP DQN & $200 \pm 0$ & $-150.27 \pm 35$ \\ \hline
+  \end{tabular}
+\end{center}
+\begin{center}
+  \begin{tabular}{|c|c|c|c|}\hline
+    {\bf Model} & {\bf $R_{avg}$ in SpaceInvader-v0 } \\ \hline
+    CNN DQN & $273.3 \pm 125.32$\\ \hline
+  \end{tabular}
+\end{center}
+
+\textbf{Quadratic Loss Function: }\\
+For all the network, I use mean squared error as loss function. This is equivalent to vanilla Q-learning update.\\
+Assume this is our loss function.
+\begin{align*}
+	\ell (w) = \mathbb E _{s, a, r, s'} 
+		\left( 
+			r + \gamma \max _{a' \in A} Q _w(s', a')
+				- Q _w(s, a) 
+		\right) ^2 ,
+\end{align*}
+
+The loss function use mean squared error. To minimize the loss function, we need to adjust the weight vector by a small amount at each step in the direction that would most reduce the error. To do this, we need to get the gradiant by calculating the derivative with respect to $w$.\\
+\\
+So we have:\\
+	$\\ \nabla \ell (w) = \nabla _w(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a)) ^2\\
+	= 2(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w (r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\\
+	= - 2(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w Q _w(s, a)$\\
+
+
+Where $\alpha \in \mathbb R$ is the learning rate. Thus we can update $w$ as:\\
+
+$w := w - \frac{1}{2}\alpha \nabla \ell (w) = w + \alpha (r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w Q _w(s, a)$\\
 
 \end{document}
 
