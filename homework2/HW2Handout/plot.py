@@ -5,7 +5,7 @@ step = 5000
 update = []
 reward = []
 
-file = open("test.txt", "r")
+file = open("log.txt", "r")
 while True:
 	line = file.readline()
 	if line:

@@ -1,0 +1,25 @@
+Overview
+
+This code provides implementation of multiple deep reinforcement learning algorithms.
+The implementations are based on Tensorflow. I use OpenAI Gym as the RL environment.
+
+DQN_Implementation.py:
+
+The implementation code.
+	content:
+		Deep Q Network
+		Linear Network
+		Multilayer Perceptron
+		Dueling Network
+		Convolutional Neuro Network
+		Experience Replay
+
+	note:
+		You can change the ENVIRONMENT_NAME to test the algorithms on different evironment.
+		You can set different network as the approximate function of the Q network.
+		CNN is only used for raw image environment of Atari games.
+
+plot.py:
+
+The auxiliary script to parse the log and plot the performance.
+You can save the print log as a log file and run the script to generate the performance plot.
