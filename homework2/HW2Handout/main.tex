@@ -277,6 +277,7 @@ Try to keep your implementation modular. Once you have the basic DQN working it 
 			\includegraphics[width=1.0\textwidth]{figures/experience_mountaincar.png}
 	  	\end{center}
 
+	  	Here I set batch size as 32, Memory size as 50000, burn in size as 10000.
 	  	After adding experience replay, I can solve both evironments in a reasonable time.\\
 	  	But the training is not stable, the reward will diverge after it reach the goal.
 	\end{solution}
@@ -353,6 +354,31 @@ Try to keep your implementation modular. Once you have the basic DQN working it 
 		  \end{tabular}
 		\end{center}
 	\end{solution}
+
+	\begin{solution}
+		Assume this is our loss function.
+		\begin{align*}
+			\ell (w) = \mathbb E _{s, a, r, s'} 
+				\left( 
+					r + \gamma \max _{a' \in A} Q _w(s', a')
+						- Q _w(s, a) 
+				\right) ^2 ,
+		\end{align*}
+
+		The loss function use mean squared error. To minimize the loss function, we need to adjust the weight vector by a small amount at each step in the direction that would most reduce the error. To do this, we need to get the gradiant by calculating the derivative with respect to $w$.\\
+		\\
+		So we have:\\
+
+			$\nabla \ell (w) = \nabla _w(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a)) ^2\\
+			= 2(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w (r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\\
+			= - 2(r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w Q _w(s, a)$\\
+
+
+		Where $\alpha \in \mathbb R$ is the learning rate. Thus we can update $w$ as:\\
+		
+		$w := w - \frac{1}{2}\alpha \nabla \ell (w) = w + \alpha (r + \gamma \max _{a' \in A} Q _w(s', a') - Q _w(s, a))\nabla _w Q _w(s, a)$\\
+	\end{solution}
+
     
     
 \end{enumerate}
